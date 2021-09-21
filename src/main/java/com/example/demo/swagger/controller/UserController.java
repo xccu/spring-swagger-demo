@@ -29,30 +29,17 @@ import java.util.Objects;
 @RestController
 @Api(value = "UserController", tags = { "用户接口" })
 @RequestMapping("/user")
-
 public class UserController {
 
     @Autowired
     private UserService userService;
 
-
-    @GetMapping("/")
-    @ApiOperation(value = "根据Id获取用户")
-    @ApiResponses(value = {
-            @ApiResponse(code = 1000, message = "成功"),
-            @ApiResponse(code = 1001, message = "失败"),
-            @ApiResponse(code = 1002, message = "缺少参数")})
-    public ResultVO getUser(@ApiParam("用户id") @RequestParam("id") int id) {
-        ResultVO vo = new ResultVO();
-        User user =userService.getUser(id);
-        vo.setUser(user);
-        vo.setCode(200);
-        vo.setErrorMsg("");
-        return vo;
-    }
-
+    /**
+     * get请求
+     * @return
+     */
     @GetMapping("/all")
-    @ApiOperation(value = "根据Id获取用户")
+    @ApiOperation(value = "获取所有用户")
     @ApiResponses(value = {
             @ApiResponse(code = 1000, message = "成功"),
             @ApiResponse(code = 1001, message = "失败"),
@@ -66,195 +53,119 @@ public class UserController {
         return vo;
     }
 
-   /* @ApiOperation(value = "添加一部电影")
-    @PostMapping("/addFilm")
-    @ApiResponses(value = { @ApiResponse(code = 1000, message = "成功"), @ApiResponse(code = 1001, message = "失败"),
-            @ApiResponse(code = 1002, response = Film.class,message = "缺少参数") })
-    public ResultVO addFilm(@ApiParam("电影名称") @RequestParam("filmName") String filmName,
-                               @ApiParam(value = "分数", allowEmptyValue = true) @RequestParam("score") Short score,
-                               @ApiParam("发布时间") @RequestParam(value = "publishTime",required = false) String publishTime,
-                               @ApiParam("创建者id") @RequestParam("creatorId") Long creatorId) {
-
-        if (Objects.isNull(filmName) || Objects.isNull(score) || Objects.isNull(publishTime) || StringUtils
-                .isEmpty(creatorId)) {
-            return new ResultVO(ResultVO.failed, "参数错误");
-        }
-
-        Film filmPOM = new Film();
-        filmPOM.setFilmName(filmName);
-        filmPOM.setScore(score);
-        DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date publishTimeDate = null;
-
-        try {
-            publishTimeDate = simpleDateFormat.parse(publishTime);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-
-        filmPOM.setPublishTime(publishTimeDate);
-        filmPOM.setCreatorId(creatorId);
-        Boolean result = filmService.addFilm(filmPOM);
-
-        if (result) {
-            return new ResultVO(CommonConstants.SUCCESSMSG);
-        }
-
-        return new ResultVO(CommonConstants.FAILD_MSG);
-
-    }
-
-
-    *//**
-
-     * 根据电影名更新
-
-     *
-
-     * @return
-
-     *//*
-
-    @PostMapping("/updateScore")
-
-    @ApiOperation(value = "根据电影名修改分数")
-
-    @ApiResponses(value = { @ApiResponse(code = 1000, message = "成功"), @ApiResponse(code = 1001, message = "失败"),
-
-            @ApiResponse(code = 1002, message = "缺少参数") })
-
-    public ResultVO updateFilmScore(@ApiParam("电影名称") @RequestParam("fileName") String fileName,
-
-                                       @ApiParam("分数") @RequestParam("score") Short score) {
-
-        if (StringUtils.isEmpty(fileName) || Objects.isNull(score)) {
-
-            return CommonConstants.getErrorResultVO();
-
-        }
-
-        filmService.updateScoreByName(fileName, score);
-
-        return CommonConstants.getSuccessResultVO();
-
-    }
-
-    *//**
-
-     * 根据电影名删除电影
-
-     *
-
-     * @param request
-
-     * @return
-
-     *//*
-
-    @PostMapping("/delFilm")
-
-    @ApiOperation(value = "根据电影名删除电影")
-
-    @ApiImplicitParams({ @ApiImplicitParam(name = "filmName",
-
-            value = "电影名",
-
-            dataType = "String",
-
-            paramType = "query",
-
-            required = true), @ApiImplicitParam(name = "id", value = "电影id", dataType = "int", paramType = "query") })
-
-    public ResultVO deleteFilmByNameOrId(HttpServletRequest request) {
-
-        //电影名
-
-        String filmName = request.getParameter("filmName");
-
-        //电影id
-
-        Long filmId = Long.parseLong(request.getParameter("id"));
-
-        filmService.deleteFilmOrId(filmName,filmId);
-
-        return CommonConstants.getSuccessResultVO();
-
-    }
-
-    *//**
-
-     * 根据id获取电影
-
-     *
-
+    /**
+     * get请求带参数
      * @param id
-
      * @return
-
-     *//*
-
-    @PostMapping("/{id}")
-
-    @ApiOperation("根据id获取电影")
-
-    @ApiImplicitParam(name = "id", value = "电影id", dataType = "long", paramType = "path", required = true)
-
-    public ResultVO getFilmById(@PathVariable Long id) {
-
-        if (Objects.isNull(id)) {
-
-            return CommonConstants.getLessParamResultVO();
-
-        }
-
-        Film film = filmService.getFilmById(id);
-
-        if (Objects.nonNull(film)) {
-
-            return new ResultVO(film);
-
-        }
-
-        return CommonConstants.getErrorResultVO();
-
+     */
+    @GetMapping("/{id}")
+    @ApiOperation(value = "根据Id获取用户")
+    @ApiResponses(value = {
+            @ApiResponse(code = 1000, message = "成功"),
+            @ApiResponse(code = 1001, message = "失败"),
+            @ApiResponse(code = 1002, message = "缺少参数")})
+    @ApiImplicitParam(name = "id", value = "用户ID", dataType = "Integer", paramType = "path", required = true)
+    public ResultVO getUser(@PathVariable Integer id) {
+        ResultVO vo = new ResultVO();
+        User user =userService.getUser(id);
+        vo.setUser(user);
+        vo.setCode(200);
+        vo.setErrorMsg("");
+        return vo;
     }
 
-    *//**
-
-     * 修改整个电影
-
-     *
-
-     * @param film
-
+    /**
+     * post请求（参数）
+     * @param userId
+     * @param name
+     * @param sex
+     * @param age
      * @return
+     */
+    @ApiOperation(value = "添加用户(参数)")
+    @PostMapping("/addParams")
+    @ApiResponses(value = {
+            @ApiResponse(code = 1000, message = "成功"),
+            @ApiResponse(code = 1001, message = "失败"),
+            @ApiResponse(code = 1002, response = User.class,message = "缺少参数") })
+    public ResultVO addParams(
+            @ApiParam("用户ID") @RequestParam("userId") Integer userId,
+            @ApiParam("用户名") @RequestParam("name") String name,
+            @ApiParam("性别") @RequestParam("sex") String sex,
+            @ApiParam(value ="年龄",allowEmptyValue = true) @RequestParam(value ="age",required = false) Integer age) {
 
-     *//*
+        ResultVO vo = new ResultVO();
+        User user =new User();
+        user.setAge(age);
+        user.setUserId(userId);
+        user.setName(name);
+        user.setSex(sex);
 
-    @PostMapping("/insertFilm")
+        vo.setUser(user);
+        vo.setCode(200);
+        vo.setErrorMsg("");
+        return vo;
+    }
 
-    @ApiOperation("插入一部电影")
+    /**
+     * post请求（json）
+     * @param user
+     * @return
+     */
+    @PostMapping("/addJson")
+    @ApiOperation(value = "添加用户(JSON)")
+    @ApiResponses(value = {
+            @ApiResponse(code = 1000, message = "成功"),
+            @ApiResponse(code = 1001, message = "失败"),
+            @ApiResponse(code = 1002, message = "缺少参数") })
+    public ResultVO addJson(@RequestBody(required = true) User user){
+        ResultVO vo = new ResultVO();
 
-    public ResultVO insertFilm(@ApiParam("电影实体对象") @RequestBody Film film) {
+        vo.setUser(user);
+        vo.setCode(200);
+        vo.setErrorMsg("");
+        return vo;
+    }
 
-        if (Objects.isNull(film)) {
+    /**
+     * put请求
+     * @param user
+     * @return
+     */
+    @PutMapping("/update")
+    @ApiOperation(value = "更新用户")
+    @ApiResponses(value = {
+            @ApiResponse(code = 1000, message = "成功"),
+            @ApiResponse(code = 1001, message = "失败"),
+            @ApiResponse(code = 1002, message = "缺少参数") })
+    public ResultVO update(@RequestBody(required = true) User user){
+        ResultVO vo = new ResultVO();
 
-            return CommonConstants.getLessParamResultVO();
+        vo.setUser(user);
+        vo.setCode(200);
+        vo.setErrorMsg("");
+        return vo;
+    }
 
-        }
+    /**
+     * delete请求
+     * @param userId
+     * @return
+     */
+    @DeleteMapping("/delete")
+    @ApiOperation(value = "删除用户")
+    @ApiResponses(value = {
+            @ApiResponse(code = 1000, message = "成功"),
+            @ApiResponse(code = 1001, message = "失败"),
+            @ApiResponse(code = 1002, message = "缺少参数") })
+    public ResultVO delete( @ApiParam("用户ID") @RequestParam("userId") Integer userId){
 
-        Boolean isSuccess = filmService.insertFilm(film);
-
-        if (isSuccess) {
-
-            return CommonConstants.getSuccessResultVO();
-
-        }
-
-        return CommonConstants.getErrorResultVO();
-
-    }*/
+        ResultVO vo = new ResultVO();
+        User user =userService.getUser(userId);
+        vo.setUser(user);
+        vo.setCode(200);
+        vo.setErrorMsg("");
+        return vo;
+    }
 
 }
-
-
